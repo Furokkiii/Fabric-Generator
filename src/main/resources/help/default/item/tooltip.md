@@ -1,0 +1,1 @@
+A tooltip is a small text that appears when hovering over an item in the inventory.

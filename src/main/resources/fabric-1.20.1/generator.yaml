@@ -1,0 +1,84 @@
+name: Minecraft Fabric for @minecraft - @buildfileversion
+status: experimental
+buildfileversion: 0.84.0
+subversion: 25
+
+java_models:
+  key: mojmap-1.20.x
+  compatible: [ mojmap-1.17.x, mojmap-1.18.x, mojmap-1.19.x, mojmap-1.20.x ]
+  requested_key_words: [ModelPart, ~ModelRenderer]
+
+import:
+  - datapack-1.20.1
+#  - forge-1.20.1
+
+gradle:
+  setup_task: tasks genSourcesWithCfr
+  run_client: runClient
+  run_server: runServer
+  export_file: "build/libs/modid-1.0.0.jar"
+
+import_formatter:
+  duplicates_whitelist:
+    - java.util
+    - net.minecraft
+    - net.fabricmc
+  priority_imports:
+    Nullable: javax.annotation
+    Codec: com.mojang.serialization
+    SoundEvent: net.minecraft.sounds
+    Environment: net.fabricmc.api
+
+source_root: "@WORKSPACEROOT/src/main/java"
+res_root: "@WORKSPACEROOT/src/main/resources"
+mod_assets_root: "@RESROOT/assets/@modid"
+mod_data_root: "@RESROOT/data/@modid"
+
+# Textures and Stuff
+structures_dir: "@MODDATAROOT/structures"
+sounds_dir: "@MODASSETSROOT/sounds"
+other_textures_dir: "@MODASSETSROOT/textures"
+block_textures_dir: "@MODASSETSROOT/textures/block"
+item_textures_dir: "@MODASSETSROOT/textures/item"
+entity_textures_dir: "@MODASSETSROOT/textures/entities"
+effect_textures_dir: "@MODASSETSROOT/textures/mob_effect"
+particle_textures_dir: "@MODASSETSROOT/textures/particle"
+screen_textures_dir: "@MODASSETSROOT/textures/screens"
+armor_textures_dir: "@RESROOT/assets/minecraft/textures/models/armor"
+
+vanilla_block_textures_dir: "client-1.20.1-client-extra.jar!/assets/minecraft/textures/block"
+vanilla_item_textures_dir: "client-1.20.1-client-extra.jar!/assets/minecraft/textures/item"
+
+base_templates:
+  - template: modbase/mod.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/@JavaModName.java"
+    canLock: true
+  - template: modbase/client.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/@JavaModNameClient.java"
+    canLock: true
+  - template: modbase/fabric.mod.json.ftl
+    writer: json
+    name: "@RESROOT/fabric.mod.json"
+    canLock: true
+
+sources_setup_tasks:
+  - task: copy_models
+    type: JAVA_viatemplate
+    template: javamodel.java.ftl
+    to: "@SRCROOT/@BASEPACKAGEPATH/client/model"
+
+language_file:
+  format: json
+  root_folder: "@MODASSETSROOT/lang/"
+  langfile_name: "@langname.json"
+
+resources_setup_tasks:
+  - task: copy_file
+    from: "@MODASSETSROOT/textures/@modpicture.png"
+    to: "@MODASSETSROOT/icon.png"
+  - task: copy_models
+    type: OBJ
+    to: "@MODASSETSROOT/models/item"
+  - task: copy_models
+    type: JSON_noinlinetextures
+    to: "@MODASSETSROOT/models/custom"

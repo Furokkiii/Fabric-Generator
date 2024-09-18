@@ -1,0 +1,14 @@
+{
+  "id": "fabric-generator",
+  "supportedversions": [
+    2024002
+  ],
+  "weight": 0,
+  "javaplugin": "net.furokkiii.fabricgenerator.Generator",
+  "info": {
+    "name": "Fabric generator",
+    "version": "0.1",
+    "description": "This is a Fabric generator",
+    "author": "Furokkiii"
+  }
+}
